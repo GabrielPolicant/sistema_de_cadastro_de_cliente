@@ -1,5 +1,6 @@
 import colorama
 import time
+from datetime import datetime
 
 colorama.init(autoreset=True)
 
@@ -49,7 +50,7 @@ def menu_option():
         log('Entrada inválida. Por favor, digite um número.', 'ERRO')
         return False
 
-def validando_cpf(cpf, list_cpfs=None):
+def validando_cpf(cpf, list_cpfs):
     """
     Função para validar o CPF do usuário.
     """
@@ -85,3 +86,41 @@ def validando_cpf(cpf, list_cpfs=None):
     else:
         log('CPF inválido. Dígitos verificadores não conferem.', 'ERRO')
         return False
+
+def calcular_idade(data_nascimento):
+    """
+    Função para calcular a idade do usuário a partir da data de nascimento.
+    """
+
+    try:
+
+        data_nascimento = datetime.strptime(data_nascimento, '%d/%m/%Y')
+        hoje = datetime.now()
+        idade = hoje.year - data_nascimento.year - ((hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day))
+        return idade
+
+    except ValueError:
+        log('Data de nascimento inválida. Use o formato dd/mm/aaaa.', 'ERRO')
+        return None
+
+def validando_email(email, list_emails):
+
+    """
+    Função para validar o email do usuário.
+    """
+
+    if not email:
+        log('Email não pode ser vazio.', 'ERRO')
+        return False
+
+    if email in list_emails:
+        log('Email já cadastrado.', 'ERRO')
+        return False
+
+    list_emails.append(email)
+
+    if '@' not in email or '.' not in email:
+        log('Email inválido. Deve conter "@" e ".".', 'ERRO')
+        return False
+
+    return True
