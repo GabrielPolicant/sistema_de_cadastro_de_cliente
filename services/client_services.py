@@ -70,3 +70,33 @@ def listar_clientes(clientes):
         """)
 
     return True
+
+def buscar_cliente(clientes):
+    """
+    Função para buscar um cliente pelo ID ou CPF.
+    """
+
+    if not clientes:
+        log('Nenhum cliente cadastrado.', 'ERRO')
+        return True
+
+    cpf_id = input("Digite o CPF ou ID do cliente que deseja buscar: ").strip()
+    if not cpf_id:
+        log('Entrada inválida. Por favor, digite um CPF ou ID.', 'ERRO')
+        return False
+
+    for cliente in clientes:
+        if str(cliente['id']) == cpf_id or cliente['cpf'] == cpf_id:
+            log('='*30)
+            log('Cliente encontrado:'.center(30))
+            log('='*30)
+
+            log('='*30)
+            log('Informações do usuário cadastrado:')
+            for chave, item in cliente.items():
+                log(f'{chave.capitalize()}: {item}')
+            log('='*30)
+            return True
+
+    log('Cliente não encontrado.', 'ERRO')
+    return False

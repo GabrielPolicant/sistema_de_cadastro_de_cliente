@@ -1,6 +1,7 @@
 import colorama
 import time
 from datetime import datetime
+import os
 
 colorama.init(autoreset=True)
 
@@ -19,6 +20,10 @@ def log(mensagem, tipo = 'INFO', cor = colorama.Fore.WHITE):
 
     else:
         print(cor + f'{mensagem}')
+
+def limpar_tela():
+    # 'cls' se for Windows ('nt'), 'clear' se for Linux/macOS
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def menu_option():
 
