@@ -15,7 +15,7 @@ def cadastrar_cliente(clientes, list_cpfs=None, list_emails=None):
         cliente['cpf'] = input('CPF: ').strip()
         cliente['email'] = input('Email: ').strip()
         cliente['telefone'] = input('Telefone: ').strip()
-        data_nascimento = input('Data de Nascimento (dd/mm/aaaa): ').strip()
+        data_nascimento = formata_data(input('Data de Nascimento (dd/mm/aaaa): ').strip())
 
         cliente['idade'] = calcular_idade(data_nascimento)
 
@@ -96,6 +96,61 @@ def buscar_cliente(clientes):
             for chave, item in cliente.items():
                 log(f'{chave.capitalize()}: {item}')
             log('='*30)
+            return True
+
+    log('Cliente não encontrado.', 'ERRO')
+    return False
+
+def atualizar_cliente(clientes, list_cpfs, list_emails):
+    log('Atualizando informações do cliente.')
+    id_cliente = input('Digite o id do cliente que deseja atualizar: ').strip()
+    
+    try:
+    
+        for cliente in clientes:
+            if id_cliente == str(cliente['id']):
+                log("Cliente encontrado. Digite os novos dados (deixe em branco para manter o valor atual).")
+
+                novo_nome = input(f'Nome ({cliente["nome"]}): ').strip().title()
+                novo_cpf = input(f'CPF ({cliente["cpf"]}): ').strip()
+                novo_email = input(f'Email ({cliente["email"]}): ').strip()
+                novo_telefone = input(f'Telefone ({cliente["telefone"]}): ').strip()
+                data_nascimento = formata_data(input('Data de Nascimento (dd/mm/aaaa): ').strip())
+
+                if novo_nome:
+                    cliente['nome'] = novo_nome
+                if novo_cpf:
+                    if validando_cpf(novo_cpf, list_cpfs):
+                        cliente['cpf'] = novo_cpf
+                if novo_email:
+                    if validando_email(novo_email, list_emails):
+                        cliente['email'] = novo_email
+                if novo_telefone:
+                    cliente['telefone'] = novo_telefone
+                if data_nascimento:
+                    cliente['idade'] = calcular_idade(data_nascimento)
+
+                log('Informações do cliente atualizadas com sucesso!', 'SUCESSO')
+                log('='*30)
+                return True
+    except Exception as e:
+        log(f'Erro ao atualizar cliente: {e}', 'ERRO')
+        return False
+
+def excluir_cliente(clientes, list_cpfs, list_emails):
+    log("Excluindo cliente do sistema.")
+    log('='*30)
+    for cliente in clientes:
+        log(f'ID: {cliente["id"]}, Nome: {cliente["nome"]}')
+    log('='*30)
+    id_cliente = input('Digite o id do cliente que deseja excluir: ').strip()
+
+    for cliente in clientes: 
+        if id_cliente == str(cliente['id']):
+            clientes.remove(cliente)
+            list_cpfs.remove(cliente['cpf'])
+            list_emails.remove(cliente['email'])
+            log('Cliente excluído com sucesso!', 'SUCESSO')
             return True
 
     log('Cliente não encontrado.', 'ERRO')

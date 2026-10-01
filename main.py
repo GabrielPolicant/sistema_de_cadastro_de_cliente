@@ -1,5 +1,5 @@
 from utils.auxiliares import *
-from services.client_services import cadastrar_cliente, listar_clientes, buscar_cliente
+from services.client_services import cadastrar_cliente, listar_clientes, buscar_cliente, atualizar_cliente, excluir_cliente
 
 def main():
 
@@ -34,6 +34,18 @@ def main():
             limpar_tela()
             if not buscar_cliente(clientes):
                 log('Falha ao buscar cliente.', 'ERRO')
+                continue
+
+        elif opcao == 4:
+            limpar_tela()
+            if not atualizar_cliente(clientes, list_cpfs, list_emails):
+                log('Falha ao atualizar cliente.', 'ERRO')
+                continue
+
+        elif opcao == 5:
+            limpar_tela()
+            if not excluir_cliente(clientes, list_cpfs, list_emails):
+                log('Falha ao excluir cliente.', 'ERRO')
                 continue
 
 if __name__ == "__main__":

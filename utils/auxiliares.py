@@ -92,6 +92,23 @@ def validando_cpf(cpf, list_cpfs):
         log('CPF inválido. Dígitos verificadores não conferem.', 'ERRO')
         return False
 
+def formata_data(entrada):
+    """
+    Função para formatar a data de nascimento do usuário.
+    """
+
+    try:
+        if len(entrada) == 8 and entrada.isdigit():
+            data_nascimento = f"{entrada[:2]}/{entrada[2:4]}/{entrada[4:]}"
+        else:
+            data_nascimento = entrada
+
+        return data_nascimento
+
+    except ValueError:
+        log('Data de nascimento inválida. Use o formato dd/mm/aaaa.', 'ERRO')
+        return None
+
 def calcular_idade(data_nascimento):
     """
     Função para calcular a idade do usuário a partir da data de nascimento.
