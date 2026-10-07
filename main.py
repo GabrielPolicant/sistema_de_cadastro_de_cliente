@@ -13,8 +13,9 @@ def main():
 
         opcao = menu_option()
 
-        if opcao == 6:
+        if opcao == 0:
             log('Saindo do sistema. Até logo!', 'SUCESSO')
+            time.sleep(2)
             limpar_tela()
             break
 

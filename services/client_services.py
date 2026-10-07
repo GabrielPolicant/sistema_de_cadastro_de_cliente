@@ -11,24 +11,24 @@ def cadastrar_cliente(clientes, list_cpfs=None, list_emails=None):
         log('Digite os dados do usuário.')
 
         cliente['id'] = len(list_cpfs) + 1
+
         cliente['nome'] = input('Nome: ').strip().title()
-        cliente['cpf'] = input('CPF: ').strip()
-        cliente['email'] = input('Email: ').strip()
-        cliente['telefone'] = input('Telefone: ').strip()
-        data_nascimento = formata_data(input('Data de Nascimento (dd/mm/aaaa): ').strip())
-
-        cliente['idade'] = calcular_idade(data_nascimento)
-
-        #Validando informações do cliente
         if not cliente['nome']:
             log('Nome não pode ser vazio.', 'ERRO')
             return False
 
+        cliente['cpf'] = input('CPF: ').strip()
         if not validando_cpf(cliente['cpf'], list_cpfs):
             return False
 
+        cliente['email'] = input('Email: ').strip()
         if not validando_email(cliente['email'], list_emails):
             return False
+
+        cliente['telefone'] = input('Telefone: ').strip()
+
+        data_nascimento = formata_data(input('Data de Nascimento (dd/mm/aaaa): ').strip())
+        cliente['idade'] = calcular_idade(data_nascimento)
 
         log('Usuário cadastrado com sucesso!', 'SUCESSO')
 
@@ -98,7 +98,7 @@ def buscar_cliente(clientes):
             log('='*30)
             return True
 
-    log('Cliente não encontrado.', 'ERRO')
+    log('Com base nos dados informados para busca, não existe nenhum cliente correspondente.', 'ERRO')
     return False
 
 def atualizar_cliente(clientes, list_cpfs, list_emails):
@@ -147,6 +147,10 @@ def excluir_cliente(clientes, list_cpfs, list_emails):
 
     for cliente in clientes: 
         if id_cliente == str(cliente['id']):
+            confirmacao = input(f'Tem certeza que deseja excluir o cliente {cliente["nome"]}? (s/n): ').strip().lower()[0]
+            if confirmacao != 's':
+                log('Exclusão cancelada.', 'ERRO')
+                return False
             clientes.remove(cliente)
             list_cpfs.remove(cliente['cpf'])
             list_emails.remove(cliente['email'])

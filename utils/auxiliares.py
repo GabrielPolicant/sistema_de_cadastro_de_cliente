@@ -36,20 +36,22 @@ def menu_option():
     log("3 - Buscar Cliente")
     log("4 - Atualizar Cliente")
     log("5 - Excluir Cliente")
-    log("6 - Sair")
+    log("0 - Sair")
         
     log('='*30, cor=colorama.Fore.BLUE)
 
     try:
         opcao = int(input('Escolha uma opção: '))
 
-        if opcao not in [1, 2, 3, 4, 5, 6]:
-            log('Opção inválida. Digite um número entre 1 e 6.', 'ERRO')
+        if opcao not in [1, 2, 3, 4, 5, 0]:
+            log('Opção inválida. Digite um número entre 1 e 5 ou 0 para sair.', 'ERRO')
             return False
 
         time.sleep(1)
         if opcao:
             return opcao
+        elif str(opcao) == '0':
+            return 0
 
     except ValueError:
         log('Entrada inválida. Por favor, digite um número.', 'ERRO')
