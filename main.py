@@ -1,5 +1,10 @@
 from utils.auxiliares import *
+from database.database import engine, Base
+from models.client import Cliente
 from services.client_services import cadastrar_cliente, listar_clientes, buscar_cliente, atualizar_cliente, excluir_cliente
+
+# Criar as tabelas no banco de dados
+Base.metadata.create_all(bind=engine)
 
 def main():
 

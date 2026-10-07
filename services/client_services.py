@@ -1,47 +1,60 @@
 from utils.auxiliares import *
+from models.client import Cliente
 
-def cadastrar_cliente(clientes, list_cpfs=None, list_emails=None):
+def cadastrar_cliente(session, list_cpfs=None, list_emails=None):
 
     log('Iniciando o cadastro do usuário.')
 
-    cliente = dict()
-
     try:
-        
+
         log('Digite os dados do usuário.')
 
-        cliente['id'] = len(list_cpfs) + 1
-
-        cliente['nome'] = input('Nome: ').strip().title()
-        if not cliente['nome']:
+        nome = input('Nome: ').strip().title()
+        if not nome:
             log('Nome não pode ser vazio.', 'ERRO')
             return False
 
-        cliente['cpf'] = input('CPF: ').strip()
-        if not validando_cpf(cliente['cpf'], list_cpfs):
+        cpf = input('CPF: ').strip()
+        if not validando_cpf(cpf, list_cpfs):
             return False
 
-        cliente['email'] = input('Email: ').strip()
-        if not validando_email(cliente['email'], list_emails):
+        email = input('Email: ').strip()
+        if not validando_email(email, list_emails):
             return False
 
-        cliente['telefone'] = input('Telefone: ').strip()
+        telefone = input('Telefone: ').strip()
 
         data_nascimento = formata_data(input('Data de Nascimento (dd/mm/aaaa): ').strip())
-        cliente['idade'] = calcular_idade(data_nascimento)
+
+        idade = calcular_idade(data_nascimento)
+
+        cliente = Cliente(
+            nome=nome,
+            cpf=cpf,
+            email=email,
+            telefone=telefone,
+            idade=idade
+        )
+
+        session.add(cliente)
+        session.commit()
 
         log('Usuário cadastrado com sucesso!', 'SUCESSO')
 
-        log('='*30)
+        log('=' * 30)
         log('Informações do usuário cadastrado:')
-        for chave, item in cliente.items():
-            log(f'{chave.capitalize()}: {item}')
-        log('='*30)
+        log(f'ID: {cliente.id}')
+        log(f'Nome: {cliente.nome}')
+        log(f'CPF: {cliente.cpf}')
+        log(f'Email: {cliente.email}')
+        log(f'Telefone: {cliente.telefone}')
+        log(f'Idade: {cliente.idade}')
+        log('=' * 30)
 
-        clientes.append(cliente)
         return True
-        
+
     except Exception as e:
+        session.rollback()
         log(f'Erro na hora do cadastro, erro: {e}.', 'ERRO')
         return False
 
