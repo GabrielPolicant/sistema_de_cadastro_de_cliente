@@ -1,5 +1,5 @@
 from utils.auxiliares import *
-from database.database import engine, Base
+from database.database import engine, Base, session
 from models.client import Cliente
 from services.client_services import cadastrar_cliente, listar_clientes, buscar_cliente, atualizar_cliente, excluir_cliente
 
@@ -9,8 +9,7 @@ Base.metadata.create_all(bind=engine)
 def main():
 
     log('Iniciando o sistema de cadastro de usuário.')
-
-    clientes = list()
+    
     list_cpfs = list()
     list_emails = list()
 
@@ -26,31 +25,31 @@ def main():
 
         if opcao == 1:
             limpar_tela()
-            if not cadastrar_cliente(clientes, list_cpfs, list_emails):
+            if not cadastrar_cliente(Cliente, session):
                 log('Falha ao cadastrar cliente.', 'ERRO')
                 continue
 
         elif opcao == 2:
             limpar_tela()
-            if not listar_clientes(clientes):
+            if not listar_clientes(Cliente, session):
                 log('Falha ao listar clientes.', 'ERRO')
                 continue
 
         elif opcao == 3:
             limpar_tela()
-            if not buscar_cliente(clientes):
+            if not buscar_cliente():
                 log('Falha ao buscar cliente.', 'ERRO')
                 continue
 
         elif opcao == 4:
             limpar_tela()
-            if not atualizar_cliente(clientes, list_cpfs, list_emails):
+            if not atualizar_cliente(list_cpfs, list_emails):
                 log('Falha ao atualizar cliente.', 'ERRO')
                 continue
 
         elif opcao == 5:
             limpar_tela()
-            if not excluir_cliente(clientes, list_cpfs, list_emails):
+            if not excluir_cliente(list_cpfs, list_emails):
                 log('Falha ao excluir cliente.', 'ERRO')
                 continue
 

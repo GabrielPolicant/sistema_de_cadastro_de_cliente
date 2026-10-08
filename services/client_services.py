@@ -1,7 +1,6 @@
 from utils.auxiliares import *
-from models.client import Cliente
 
-def cadastrar_cliente(session, list_cpfs=None, list_emails=None):
+def cadastrar_cliente(Cliente, session):
 
     log('Iniciando o cadastro do usuário.')
 
@@ -15,11 +14,11 @@ def cadastrar_cliente(session, list_cpfs=None, list_emails=None):
             return False
 
         cpf = input('CPF: ').strip()
-        if not validando_cpf(cpf, list_cpfs):
+        if not validando_cpf(cpf, session, Cliente):
             return False
 
         email = input('Email: ').strip()
-        if not validando_email(email, list_emails):
+        if not validando_email(email, session, Cliente):
             return False
 
         telefone = input('Telefone: ').strip()
@@ -58,14 +57,15 @@ def cadastrar_cliente(session, list_cpfs=None, list_emails=None):
         log(f'Erro na hora do cadastro, erro: {e}.', 'ERRO')
         return False
 
-def listar_clientes(clientes):
+def listar_clientes(Cliente, session):
     """
     Função para listar os clientes cadastrados.
     """
 
+    clientes = session.query(Cliente).all()
     if not clientes:
         log('Nenhum cliente cadastrado.', 'ERRO')
-        return False
+        return True
 
     log('='*30)
     log('Listando clientes cadastrados:'.center(30))
@@ -74,12 +74,12 @@ def listar_clientes(clientes):
     for cliente in clientes:
         log('-'*30)
         log(f"""
-    ID: {cliente['id']}, 
-    Nome: {cliente['nome']}, 
-    CPF: {cliente['cpf']}, 
-    Email: {cliente['email']}, 
-    Telefone: {cliente['telefone']}, 
-    Idade: {cliente['idade']}
+    ID: {cliente.id}, 
+    Nome: {cliente.nome}, 
+    CPF: {cliente.cpf}, 
+    Email: {cliente.email}, 
+    Telefone: {cliente.telefone}, 
+    Idade: {cliente.idade}
         """)
 
     return True

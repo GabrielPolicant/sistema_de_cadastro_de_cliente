@@ -57,19 +57,12 @@ def menu_option():
         log('Entrada inválida. Por favor, digite um número.', 'ERRO')
         return False
 
-def validando_cpf(cpf, list_cpfs):
+def validando_cpf(cpf, session, Cliente):
     """
     Função para validar o CPF do usuário.
     """
 
     cpf = cpf.replace('.', '').replace('-', '')
-
-    if cpf in list_cpfs:
-        log('CPF já cadastrado.', 'ERRO')
-        return False
-
-    list_cpfs.append(cpf)
-
     if len(cpf) != 11 or not cpf.isdigit():
         log('CPF inválido. Deve conter 11 dígitos numéricos.', 'ERRO')
         return False
@@ -77,6 +70,13 @@ def validando_cpf(cpf, list_cpfs):
     # Verifica se todos os dígitos são iguais
     if cpf == cpf[0] * len(cpf):
         log('CPF inválido. Todos os dígitos são iguais.', 'ERRO')
+        return False
+
+    cpf_existente = session.query(Cliente).filter(Cliente.cpf == cpf).first()
+
+
+    if cpf_existente:
+        log('CPF já cadastrado.', 'ERRO')
         return False
 
     # Cálculo do primeiro dígito verificador
@@ -127,7 +127,7 @@ def calcular_idade(data_nascimento):
         log('Data de nascimento inválida. Use o formato dd/mm/aaaa.', 'ERRO')
         return None
 
-def validando_email(email, list_emails):
+def validando_email(email, session, Cliente):
 
     """
     Função para validar o email do usuário.
@@ -137,14 +137,13 @@ def validando_email(email, list_emails):
         log('Email não pode ser vazio.', 'ERRO')
         return False
 
-    if email in list_emails:
-        log('Email já cadastrado.', 'ERRO')
-        return False
-
-    list_emails.append(email)
-
     if '@' not in email or '.' not in email:
         log('Email inválido. Deve conter "@" e ".".', 'ERRO')
+        return False
+
+    email_existente = session.query(Cliente).filter(Cliente.email == email).first()
+    if email_existente:
+        log('Email já cadastrado.', 'ERRO')
         return False
 
     return True
